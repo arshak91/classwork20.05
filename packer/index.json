@@ -1,0 +1,41 @@
+{
+    "variables": {
+        "aws_access_key": "{{env `AWS_ACCESS_KEY_ID`}}",
+        "aws_secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}",
+        "source_ami": "ami-007855ac798b5175e",
+        "instance_type": "t2.micro",
+        "region": "us-east-1"
+      },
+    "builders": [
+      {
+        "type": "amazon-ebs",
+        "ami_name": "docker-ami",
+        "access_key": "{{user `aws_access_key`}}",
+        "secret_key": "{{user `aws_secret_key`}}",
+        "region": "{{user `region`}}",
+        "instance_type": "{{user `instance_type`}}",
+        "source_ami": "{{user `source_ami`}}",
+        "ssh_username": "ubuntu"
+      }
+    ],
+    "provisioners": [
+      {
+        "type": "shell",
+        "inline": [
+          "sudo apt update",
+          "sudo apt install -y apt-transport-https ca-certificates curl software-properties-common",
+          "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg",
+          "echo \"deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable\" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null",
+          "sudo apt update",
+          "sudo apt install -y docker-ce"
+        ]
+      }
+    ],
+    "post-processors": [
+      {
+        "type": "manifest",
+        "output": "./manifest.json",
+        "strip_path": true
+      }
+    ]
+}
