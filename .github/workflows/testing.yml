@@ -19,4 +19,4 @@ jobs:
 
       - name: Run Packer build
         run: |
-          packer build ../../packer/index.json
+          packer build /packer/index.json
