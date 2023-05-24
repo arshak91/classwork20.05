@@ -17,6 +17,11 @@ jobs:
           echo "AWS_ACCESS_KEY_ID=AKIA2SK7BR33VSVRFINF" >> $GITHUB_ENV
           echo "AWS_SECRET_ACCESS_KEY=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" >> $GITHUB_ENV
 
+      - name: Find index.json
+        id: find-file
+        run: |
+          echo "::set-output name=file_path::$(find . -name 'index.json' -type f -print -quit)"
+
       - name: Run Packer build
         run: |
-          packer build /packer/index.json
+          packer build ${{ steps.find-file.outputs.file_path }}
