@@ -1,48 +1,113 @@
 ---
 - name: Install Nginx in AWS AMI Docker container
   hosts: all
-  become: yes
-
+  remote_user: ubuntu
+  become: true
+  vars:
+    ansible_ssh_private_key_file: /home/arshak/Desktop/pem/virginia.pem
+    container_count: 4
+    default_container_name: docker
+    default_container_image: ubuntu
+    default_container_command: sleep 1
   tasks:
     - name: Update apt package cache
       apt:
         update_cache: yes
       become: yes
-
-    - name: Install Docker
+    - name: Install NGINX
       apt:
-        name: docker.io
+        name: nginx
         state: present
-      become: yes
-
-    - name: Install python3-pip package
+    - name: Install Docker dependencies
       apt:
-        name: python3-pip
+        name: "{{ item }}"
         state: present
-      become: yes
+      loop:
+        - apt-transport-https
+        - ca-certificates
+        - curl
+        - software-properties-common
+        - python3-setuptools
 
-    - name: Install Docker Python package
+    - name: Install gnupg, lsb-release, python3-pip, virtualenv packages
+      shell:
+        sudo apt install -y gnupg &&
+        sudo apt install -y lsb-release &&
+        sudo apt install -y python3-pip &&
+        sudo apt install -y virtualenv
+    - name: Add Docker GPG apt Key
+      shell: curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor | sudo tee /usr/share/keyrings/docker-archive-keyring.gpg > /dev/null
+
+    - name: Create Docker repository source file
+      shell: echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu focal stable" | sudo tee /etc/apt/sources.list.d/docker.list
+
+    - name: Update apt and install docker-ce
+      apt:
+        name: docker-ce
+        state: latest
+
+    - name: Install Docker Module for Python
       pip:
         name: docker
         state: present
-      become: yes
+        executable: pip3
 
-    - name: Start Docker service
-      service:
-        name: docker
-        state: started
-      become: yes
+    - name: Create folder
+      file:
+        path: /var/www/rateInfo
+        state: directory
+        mode: '0755'  # Update with appropriate permissions if needed
+        owner: root  # Update with appropriate user if different
 
-    - name: Pull Nginx Docker image
-      docker_image:
-        name: nginx
-      become: yes
+    - name: Create file
+      file:
+        path: /var/www/rateInfo/index.html
+        state: touch
+        mode: '0644'  # Update with appropriate permissions if needed
+        owner: root  # Update with appropriate user if different
 
-    - name: Run Nginx Docker container
-      docker_container:
-        name: my-nginx
-        image: nginx
-        state: started
-        ports:
-          - "80:80"
-      become: yes
+    - name: Create file
+      file:
+        path: /var/www/rateInfo/rate.html
+        state: touch
+        mode: 0644  # Update with appropriate permissions if needed
+        owner: ubuntu
+
+    - name: Create directory
+      file:
+        path: /etc/nginx/sites-enabled
+        state: directory
+        mode: '0755'
+        owner: root
+
+    - name: Add NGINX conf
+      copy:
+        src: ./../nginx/nginx.conf
+        dest: /etc/nginx/sites-enabled/nginx.conf
+        owner: ubuntu  # Update with appropriate user if different
+        mode: 0644  # Update with appropriate permissions if needed
+    - name: set default NGINX conf
+      file:
+        src: /etc/nginx/sites-enabled/nginx.conf
+        dest: /etc/nginx/sites-enabled/default
+        state: link
+
+    - name: Create file
+      file:
+        path: /home/ubuntu/scrap.sh
+        state: touch
+        mode: 0644  # Update with appropriate permissions if needed
+        owner: ubuntu
+
+    - name: Add NGINX conf
+      copy:
+        src: ./../nginx/scrap.sh
+        dest: /home/ubuntu/scrap.sh
+        owner: root  # Update with appropriate user if different
+        mode: 0644  # Update with appropriate permissions if needed
+
+    - name: Create cron job
+      cron:
+        name: RunScript
+        minute: "*/1"
+        job: "/scrap.sh"

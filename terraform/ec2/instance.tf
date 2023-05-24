@@ -33,8 +33,7 @@ resource "aws_instance" "web" {
       host        = self.public_ip
     }
     inline = [
-      "echo \"${self.public_ip}\" >> ../../../../ansible/inventories",
-      # "ansible-playbook -i \"${self.public_ip}\" ../../../ansible/nginx-container.yml"
+      "sudo apt update"
     ]
   }
   tags = {
@@ -43,6 +42,6 @@ resource "aws_instance" "web" {
 }
 
 output "aws_instance" {
-  value = aws_instance.web
+  value = aws_instance.web.public_ip
 }
 # "sudo scp -i ./Desktop/pem/virginia.pem ./Desktop/pem/virginia.pem ubuntu@${self.public_dns}:/home/ubuntu"
