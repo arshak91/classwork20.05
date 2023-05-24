@@ -8,14 +8,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-region: us-east-1
+
       - name: Checkout repository
         uses: actions/checkout@v3
-
-      - name: Set up AWS credentials
-        # run: npm install
-        run: |
-          echo "AWS_ACCESS_KEY_ID=AKIA2SK7BR33VSVRFINF" >> $GITHUB_ENV
-          echo "AWS_SECRET_ACCESS_KEY=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" >> $GITHUB_ENV
 
       - name: Find index.json
         id: find-file
