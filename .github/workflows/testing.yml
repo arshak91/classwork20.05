@@ -18,7 +18,7 @@ jobs:
       - name: Find index.json
         id: find-file
         run: |
-          FILE_PATH=$(find packer -name "index.json")
+          FILE_PATH=$(find . -name "index.json" -path "../../packer/*")
           echo "::set-output name=file_path::$FILE_PATH"
 
       - name: Run Packer build
