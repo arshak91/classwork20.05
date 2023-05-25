@@ -16,12 +16,12 @@ jobs:
           aws-region: us-east-1
 
       - name: Find index.json
-        id: find-file
+        id: find_file
         run: |
           FILE_PATH=$(find . -name "index.json" -path "../../packer/*")
-          echo "::set-output name=file_path::$FILE_PATH"
+          echo "{file_path}={$FILE_PATH}" >> $GITHUB_OUTPUT
 
       - name: Run Packer build
         run: |
-          FILE_PATH=${{ steps.find-file.outputs.file_path }}
-          packer build $FILE_PATH
+          FILE_PATH=${{ steps.find_file.outputs.file_path }}
+          packer build "$FILE_PATH"
