@@ -18,8 +18,5 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
           aws-region: us-east-1
 
-      - name: Packer Init
-        run: packer init packer/
-
       - name: Packer Build
-        run: packer build packer/
+        run: packer build packer/index.json
