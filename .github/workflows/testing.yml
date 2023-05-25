@@ -15,14 +15,8 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
           aws-region: us-east-1
 
-      - name: Find index.json
-        id: find_file
-        run: |
-          FILE_PATH=$(find . -name "index.json" -path "../../packer/*")
-          echo "$FILE_PATH"
-          echo "{file_path}={$FILE_PATH}" >> $GITHUB_OUTPUT
+      - name: Packer Init
+        run: packer init packer/
 
-      - name: Run Packer build
-        run: |
-          FILE_PATH=${{ steps.find_file.outputs.file_path }}
-          packer build "$FILE_PATH"
+      - name: Packer Build
+        run: packer build packer/
