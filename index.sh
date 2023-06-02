@@ -25,6 +25,7 @@ else
     # print created AMI ID
     AMI_ID=$(jq -r '.builds[-1].artifact_id' ./packer/manifest.json | cut -d ":" -f2)
     echo ami $AMI_ID
+    
 
     #create EC2 Instance
     cd ./terraform/ec2
