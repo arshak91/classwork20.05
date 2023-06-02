@@ -14,5 +14,4 @@
       file:
         src: /etc/nginx/sites-enabled/nginx.conf
         dest: /etc/nginx/sites-enabled/default
-        # owner: ubuntu  # Update with appropriate user if different
         state: link

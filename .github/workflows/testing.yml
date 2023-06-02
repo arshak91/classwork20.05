@@ -26,7 +26,7 @@ jobs:
           packer build packer/index.json
 
       - name: Switch to Terraform directory
-        run: cd /terraform/ec2/
+        run: cd ./../../terraform/ec2/
 
       - name: Terraform Init
         run: terraform init
@@ -40,10 +40,10 @@ jobs:
           python-version: 3.x
 
       - name: Switch to Ansible directory
-        run: cd /ansible/
+        run: cd ./../../ansible/
 
       - name: Install Ansible
         run: pip install ansible
 
       - name: Run Ansible playbook
-        run: ansible-playbook playbook.yml -e "aws_access_key=${{ secrets.AWS_ACCESS_KEY }}" -e "aws_secret_key=${{ secrets.AWS_SECRET_KEY }}"
+        run: ansible-playbook nginx-container.yml -e "aws_access_key=${{ secrets.AWS_ACCESS_KEY }}" -e "aws_secret_key=${{ secrets.AWS_SECRET_KEY }}"
