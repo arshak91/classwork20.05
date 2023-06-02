@@ -11,12 +11,12 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
-          aws-region: us-east-1
+      # - name: Configure AWS Credentials
+      #   uses: aws-actions/configure-aws-credentials@v2
+      #   with:
+      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+      #     aws-region: us-east-1
 
       - name: Packer Build
         env:
@@ -24,3 +24,26 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
         run: |
           packer build packer/index.json
+
+      - name: Switch to Terraform directory
+        run: cd /terraform/ec2/
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve -var="access_key=${{ secrets.AWS_ACCESS_KEY }}" -var="secret_key=${{ secrets.AWS_SECRET_KEY }}" -var-file=variables.tfvars
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+
+      - name: Switch to Ansible directory
+        run: cd /ansible/
+
+      - name: Install Ansible
+        run: pip install ansible
+
+      - name: Run Ansible playbook
+        run: ansible-playbook playbook.yml -e "aws_access_key=${{ secrets.AWS_ACCESS_KEY }}" -e "aws_secret_key=${{ secrets.AWS_SECRET_KEY }}"

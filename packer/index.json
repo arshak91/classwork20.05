@@ -28,12 +28,5 @@
         "sudo apt install -y docker-ce"
       ]
     }
-  ],
-  "post-processors": [
-    {
-      "type": "manifest",
-      "output": "./manifest.json",
-      "strip_path": true
-    }
   ]
 }
