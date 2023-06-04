@@ -1,37 +1,13 @@
 ---
 - name: Install Nginx in AWS AMI Docker container
-  hosts: localhost
-  gather_facts: False
+  hosts: all
+  remote_user: ubuntu
   vars:
     ansible_ssh_private_key_file: /home/arshak/Desktop/pem/virginia.pem
     container_count: 4
     default_container_name: docker
     default_container_image: ubuntu
     default_container_command: sleep 1
-  tasks:
-    - name: Get EC2 instances
-      ec2_remote_facts:
-        aws_access_key: "{{ aws_access_key }}"
-        aws_secret_key: "{{ aws_secret_key }}"
-        region: "us-east-1"
-      register: ec2_instances
-
-    - name: Sort EC2 instances by launch time
-      set_fact:
-        sorted_instances: "{{ ec2_instances.instances | sort(attribute='launch_time') }}"
-
-    - name: Take last created instance
-      set_fact:
-        last_instance: "{{ sorted_instances[-1] }}"
-
-    - name: Configure dynamic inventory with last instance
-      add_host:
-        name: "{{ last_instance.private_ip_address }}"
-        groups: last_instance
-
-- name: Install Nginx on last instance
-  hosts: last_instance
-  become: true
   tasks:
     - name: Update apt package cache
       apt:
