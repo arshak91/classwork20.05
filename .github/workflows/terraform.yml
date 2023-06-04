@@ -3,6 +3,10 @@ on:
   push:
     branches:
       - main
+    paths:
+      - '.github/workflows/terraform.yml'
+      - 'ansible/**'
+      - 'terraform/**'
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -25,9 +29,6 @@ jobs:
         run: |
           packer build packer/index.json
 
-      - name: Switch to Terraform directory
-        run: cd ./../../terraform/ec2/
-
       - name: Terraform Init
         run: terraform init
 
@@ -38,12 +39,6 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.x
-
-      - name: Switch to Ansible directory
-        run: cd ./../../ansible/
-
-      - name: Install Ansible
-        run: pip install ansible
 
       - name: Run Ansible playbook
         run: ansible-playbook nginx-container.yml -e "aws_access_key=${{ secrets.AWS_ACCESS_KEY }}" -e "aws_secret_key=${{ secrets.AWS_SECRET_KEY }}"
