@@ -11,8 +11,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    env:
-      AWS_PRIVATE_KEY: ${{ secrets.AWS_PRIVATE_KEY }}
+    # env:
+    #   AWS_PRIVATE_KEY: ${{ secrets.AWS_PRIVATE_KEY }}
 
     steps:
       - name: Checkout Repository
