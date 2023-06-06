@@ -48,7 +48,7 @@ jobs:
       - name: Get Terraform Outputs
         id: terraform_outputs
         run: |
-          output=$(terraform output -txt)
+          output=$(terraform output -json)
           echo "::set-output name=outputs::$output"
 
       - name: Create Ansible Inventory
