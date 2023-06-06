@@ -55,12 +55,15 @@ jobs:
           publicIp=$(terraform output aws_instance)
           echo "::set-output name=outputs::$publicIp"
 
+      - name: write inventory
+        working-directory: ./ansible
+        run: echo ${{ steps.aws_instance.outputs.outputs }} >> inventories
       - name: Cat file
         working-directory: ./ansible
         run: cat inventories
 
+
       - name: Run Ansible playbook
         working-directory: ./ansible
         run: |
-          echo ${{ steps.aws_instance.outputs.outputs }} >> inventories
           ansible-playbook -i inventories nginx-container.yml -e "ansible_ssh_private_key=${{ secrets.AWS_PRIVATE_KEY }}" -e "aws_access_key=${{ secrets.AWS_ACCESS_KEY }}" -e "aws_secret_key=${{ secrets.AWS_SECRET_KEY }}"
