@@ -25,17 +25,17 @@ resource "aws_instance" "web" {
   subnet_id     = aws_subnet.web.id
   vpc_security_group_ids = [aws_security_group.web.id]
   key_name      = "virginia"
-  provisioner "remote-exec" {
-    connection {
-      type        = "ssh"
-      user        = "ubuntu"
-      private_key = var.private_key_path
-      host        = self.public_ip
-    }
-    inline = [
-      "sudo apt update"
-    ]
-  }
+  # provisioner "remote-exec" {
+  #   connection {
+  #     type        = "ssh"
+  #     user        = "ubuntu"
+  #     private_key = var.private_key_path
+  #     host        = self.public_ip
+  #   }
+  #   inline = [
+  #     "sudo apt update"
+  #   ]
+  # }
   tags = {
     Name = "${var.name}-Instance"
   }
