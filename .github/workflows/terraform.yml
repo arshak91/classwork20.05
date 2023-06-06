@@ -22,18 +22,20 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
           aws-region: us-east-1
 
-      - name: Packer Build
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
-        run: |
-          packer build packer/index.json
+      # - name: Packer Build
+      #   env:
+      #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+      #   run: |
+      #     packer build packer/index.json
 
       - name: Terraform Init
         run: terraform init -upgrade
+        working-directory: ./terraform/ec2
 
       - name: Terraform Apply
-        run: terraform apply -var="access_key=${{ secrets.AWS_ACCESS_KEY }}" -var="secret_key=${{ secrets.AWS_SECRET_KEY }}" -var-file="./terraform/ec2/variables.tfvars"
+        working-directory: ./terraform/ec2
+        run: terraform apply -var="access_key=${{ secrets.AWS_ACCESS_KEY }}" -var="secret_key=${{ secrets.AWS_SECRET_KEY }}" -var-file="./variables.tfvars"
 
       - name: Set up Python
         uses: actions/setup-python@v2
