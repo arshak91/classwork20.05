@@ -58,7 +58,7 @@ jobs:
       - name: Create Ansible Inventory
         working-directory: ./ansible
         run: |
-          echo "${{ steps.aws_instance.outputs.outputs }}" >> inventories
+          echo "${{ steps.aws_instance.outputs.outputs }}" >> "./inventories"
 
       - name: Install Ansible
         run: |
@@ -73,4 +73,4 @@ jobs:
 
       - name: Run Ansible playbook
         working-directory: ./ansible
-        run: ansible-playbook -i inventory nginx-container.yml --extra-vars "ansible_ssh_private_key_file=${{ secrets.AWS_PRIVATE_KEY }}" -e "aws_access_key=${{ secrets.AWS_ACCESS_KEY }}" -e "aws_secret_key=${{ secrets.AWS_SECRET_KEY }}"
+        run: ansible-playbook -i inventories nginx-container.yml --extra-vars "ansible_ssh_private_key_file=${{ secrets.AWS_PRIVATE_KEY }}" -e "aws_access_key=${{ secrets.AWS_ACCESS_KEY }}" -e "aws_secret_key=${{ secrets.AWS_SECRET_KEY }}"
