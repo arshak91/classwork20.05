@@ -55,10 +55,9 @@ jobs:
           publicIp=$(terraform output aws_instance)
           echo "::set-output name=outputs::$publicIp"
 
-      - name: Install Ansible
-        run: |
-          sudo apt update
-          sudo apt install -y ansible
+      - name: Cat file
+        working-directory: ./ansible
+        run: cat inventories
 
       - name: Run Ansible playbook
         working-directory: ./ansible
