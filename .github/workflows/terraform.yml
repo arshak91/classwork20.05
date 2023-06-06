@@ -30,7 +30,7 @@ jobs:
           packer build packer/index.json
 
       - name: Terraform Init
-        run: terraform init
+        run: terraform init -upgrade
 
       - name: Terraform Apply
         run: terraform apply -auto-approve -var="access_key=${{ secrets.AWS_ACCESS_KEY }}" -var="secret_key=${{ secrets.AWS_SECRET_KEY }}" -var-file="./terraform/ec2/variables.tfvars"
