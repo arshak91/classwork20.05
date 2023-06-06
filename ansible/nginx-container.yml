@@ -3,7 +3,7 @@
   hosts: all
   remote_user: ubuntu
   vars:
-    # ansible_ssh_private_key_file: "{{ lookup('env', 'AWS_PRIVATE_KEY') }}"
+    ansible_ssh_private_key: "{{ lookup('env', 'AWS_PRIVATE_KEY') }}"
     container_count: 4
     default_container_name: docker
     default_container_image: ubuntu
