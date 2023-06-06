@@ -8,8 +8,8 @@
     {
       "type": "amazon-ebs",
       "ami_name": "docker-ami-{{timestamp}}",
-      "access_key": "{{ env `AWS_ACCESS_KEY_ID` }}",
-      "secret_key": "{{ env `AWS_SECRET_ACCESS_KEY` }}",
+      "access_key": "{{ env.AWS_ACCESS_KEY_ID }}",
+      "secret_key": "{{ env.AWS_SECRET_ACCESS_KEY }}",
       "region": "{{user `region`}}",
       "instance_type": "{{user `instance_type`}}",
       "source_ami": "{{user `source_ami`}}",
