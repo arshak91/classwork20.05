@@ -3,7 +3,7 @@
   hosts: all
   remote_user: ubuntu
   vars:
-    ansible_ssh_private_key_file: "~/.ssh/id_rsa"
+    ansible_ssh_private_key_file: "~/.ssh/authorized_keys"
     container_count: 4
     default_container_name: docker
     default_container_image: ubuntu
