@@ -56,14 +56,14 @@
         path: /var/www/rateInfo
         state: directory
         mode: '0755'  # Update with appropriate permissions if needed
-        owner: root  # Update with appropriate user if different
+        owner: ubuntu  # Update with appropriate user if different
 
     - name: Create file
       file:
         path: /var/www/rateInfo/index.html
         state: touch
         mode: '0644'  # Update with appropriate permissions if needed
-        owner: root  # Update with appropriate user if different
+        owner: ubuntu  # Update with appropriate user if different
 
     - name: Create file
       file:
@@ -77,7 +77,7 @@
         path: /etc/nginx/sites-enabled
         state: directory
         mode: '0755'
-        owner: root
+        owner: ubuntu
 
     - name: Add NGINX conf
       copy:
@@ -103,7 +103,7 @@
       copy:
         src: ./../nginx/scrap.sh
         dest: /home/ubuntu/opt/scrap.sh
-        owner: root  # Update with appropriate user if different
+        owner: ubuntu  # Update with appropriate user if different
         mode: 0644  # Update with appropriate permissions if needed
 
     - name: sleepy
