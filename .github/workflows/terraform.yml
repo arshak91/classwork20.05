@@ -58,7 +58,7 @@ jobs:
       - name: Create Ansible Inventory
         working-directory: ./ansible
         run: |
-          echo "${{ steps.aws_instance.outputs.outputs }}" >> inventory
+          echo "${{ steps.aws_instance.outputs.outputs }}" >> inventories
 
       - name: Install Ansible
         run: |
