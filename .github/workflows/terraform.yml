@@ -46,17 +46,16 @@ jobs:
           python-version: 3.x
 
       - name: Get Terraform Outputs
-        id: terraform_outputs
+        working-directory: ./terraform/ec2
+        id: aws_instance
         run: |
-          output=$(terraform output -json)
-          echo "::set-output name=outputs::$output"
+          publicIp=$(terraform output aws_instance)
+          echo "::set-output name=outputs::$publicIp"
 
       - name: Create Ansible Inventory
         working-directory: ./ansible
         run: |
-          echo "${{ steps.terraform_outputs.outputs.outputs }}" > terraform_outputs.json
-          echo "[my_hosts]" > ansible_inventory.ini
-          jq -r '.my_host.value[]' terraform_outputs.json >> ansible_inventory.ini
+          echo "${{ steps.aws_instance.outputs.outputs }}" >> inventory
 
       - name: Install Ansible
         run: |
@@ -65,4 +64,4 @@ jobs:
 
       - name: Run Ansible playbook
         working-directory: ./ansible
-        run: ansible-playbook -i ansible_inventory.ini nginx-container.yml -e "aws_access_key=${{ secrets.AWS_ACCESS_KEY }}" -e "aws_secret_key=${{ secrets.AWS_SECRET_KEY }}"
+        run: ansible-playbook -i inventory nginx-container.yml -e "aws_access_key=${{ secrets.AWS_ACCESS_KEY }}" -e "aws_secret_key=${{ secrets.AWS_SECRET_KEY }}"
