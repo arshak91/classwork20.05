@@ -64,4 +64,6 @@ jobs:
 
       - name: Run Ansible playbook
         working-directory: ./ansible
+        env:
+          ANSIBLE_PRIVATE_KEY: ${{ secrets.AWS_PRIVATE_KEY }}
         run: ansible-playbook -i inventory nginx-container.yml -e "aws_access_key=${{ secrets.AWS_ACCESS_KEY }}" -e "aws_secret_key=${{ secrets.AWS_SECRET_KEY }}"
