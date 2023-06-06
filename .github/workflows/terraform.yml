@@ -25,12 +25,12 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
           aws-region: us-east-1
 
-      # - name: Packer Build
-      #   env:
-      #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
-      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
-      #   run: |
-      #     packer build packer/index.json
+      - name: Packer Build
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+        run: |
+          packer build packer/index.json
 
       - name: Terraform Init
         run: terraform init -upgrade
