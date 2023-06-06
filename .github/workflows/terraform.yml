@@ -29,21 +29,22 @@ jobs:
       #   run: |
       #     packer build packer/index.json
 
-      - name: Terraform Init
-        run: terraform init -upgrade
-        working-directory: ./terraform/ec2
+      # - name: Terraform Init
+      #   run: terraform init -upgrade
+      #   working-directory: ./terraform/ec2
 
-      - name: Terraform Apply
-        working-directory: ./terraform/ec2
-        run: terraform apply -auto-approve -var="access_key=${{ secrets.AWS_ACCESS_KEY }}"
-          -var="secret_key=${{ secrets.AWS_SECRET_KEY }}"
-          -var="private_key_path=${{ secrets.AWS_PRIVATE_KEY }}"
-          -var-file="./variables.tfvars"
+      # - name: Terraform Apply
+      #   working-directory: ./terraform/ec2
+      #   run: terraform apply -auto-approve -var="access_key=${{ secrets.AWS_ACCESS_KEY }}"
+      #     -var="secret_key=${{ secrets.AWS_SECRET_KEY }}"
+      #     -var="private_key_path=${{ secrets.AWS_PRIVATE_KEY }}"
+      #     -var-file="./variables.tfvars"
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.x
+      # - name: Set up Python
+      #   uses: actions/setup-python@v2
+      #   with:
+      #     python-version: 3.x
 
       - name: Run Ansible playbook
+        working-directory: ./ansible
         run: ansible-playbook nginx-container.yml -e "aws_access_key=${{ secrets.AWS_ACCESS_KEY }}" -e "aws_secret_key=${{ secrets.AWS_SECRET_KEY }}"
