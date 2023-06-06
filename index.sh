@@ -4,8 +4,8 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 echo $3
 if [[ "$3" ]];
 then
-    AMI_ID=$(jq -r '.builds[-1].artifact_id' ./packer/manifest.json | cut -d ":" -f2)
-    echo $AMI_ID
+    # AMI_ID=$(jq -r '.builds[-1].artifact_id' ./packer/manifest.json | cut -d ":" -f2)
+    # echo $AMI_ID
     cd ./terraform/ec2
 
     terraform destroy -var="access_key=$1" \
