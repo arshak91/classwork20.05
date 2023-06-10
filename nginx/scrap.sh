@@ -7,8 +7,8 @@ do
   input_file="index.html"
 
   # Read the input file into a variable
-  html_content=$(cat "$input_file")
-
+  html_content=$(cat "rate.html")
+echo $html_content
   selectPattern='<a href="\/am\/bank\/[a-z\-]{1,19}">[Ա-Ֆա-և_ -]{1,30}<\/a>'
   pattern='<td>.*<\/td>'
 
@@ -128,5 +128,5 @@ do
   sleep 30
 
   # Write the HTML code to a file
-  echo "$html" > /var/www/rateInfo/index.html
+  echo "$html" > "index.html"
 done

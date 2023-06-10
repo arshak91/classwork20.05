@@ -3,20 +3,21 @@
   hosts: all
   remote_user: ubuntu
   vars:
-    ansible_ssh_private_key: "{{ lookup('env', 'AWS_PRIVATE_KEY') }}"
+    ansible_ssh_private_key_file: "~/.ssh/id_rsa"
     container_count: 4
     default_container_name: docker
     default_container_image: ubuntu
     default_container_command: sleep 1
+    ansible_become: true
+    ansible_become_user: root
   tasks:
     - name: Update apt package cache
       apt:
         update_cache: yes
-      become: yes
+
     - name: Install NGINX
       apt:
         name: nginx
-        state: present
     - name: Install Docker dependencies
       apt:
         name: "{{ item }}"
@@ -91,7 +92,12 @@
         src: /etc/nginx/sites-enabled/nginx.conf
         dest: /etc/nginx/sites-enabled/default
         state: link
-
+    - name: Create directory
+      file:
+        path: /home/ubuntu/opt
+        state: directory
+        mode: '0755'
+        owner: ubuntu
     - name: Create file
       file:
         path: /home/ubuntu/opt/scrap.sh
@@ -107,4 +113,4 @@
         mode: 0644  # Update with appropriate permissions if needed
 
     - name: sleepy
-      script: /opt/scrap.sh
+      shell: "/home/ubuntu/opt/scrap.sh > /dev/null 2>&1 &"
