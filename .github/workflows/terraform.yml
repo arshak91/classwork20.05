@@ -58,29 +58,3 @@ jobs:
           publicDNS=$(terraform output EC2_Instance_Public_DNS)
           echo "::set-output name=publicIp::$publicIp"
           echo "::set-output name=publicDNS::$publicDNS"
-
-      - name: write inventory
-        working-directory: ./ansible
-        run: echo ${{ steps.aws_instance.outputs.publicIp }} > inventories
-      - name: Cat file
-        working-directory: ./ansible
-        run: cat inventories
-
-      - name: Set up SSH key
-        run: |
-          mkdir -p ~/.ssh
-          touch ~/.ssh/id_rsa
-          echo "${{ secrets.AWS_PRIVATE_KEY }}" > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
-
-      # - name: Connect to EC2 instance and copy PEM file
-      #   run: |
-      #     touch ~/.ssh/known_hosts && chmod 600 ~/.ssh/known_hosts
-      #     echo ${{ steps.aws_instance.outputs.publicIp }} > ~/.ssh/known_hosts
-      #     ssh-keygen -R ${{ steps.aws_instance.outputs.publicIp }}
-          # scp -i ~/.ssh/id_rsa /.ssh/virginia.pem ubuntu@${{ steps.aws_instance.outputs.publicDNS }}:/.ssh/
-
-
-      - name: Run Ansible playbook
-        working-directory: ./ansible
-        run: |
-          ansible-playbook -i inventories nginx-container.yml
