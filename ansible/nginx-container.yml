@@ -2,14 +2,7 @@
 - name: Install Nginx in AWS AMI Docker container
   hosts: all
   remote_user: ubuntu
-  vars:
-    ansible_ssh_private_key_file: "~/.ssh/id_rsa"
-    container_count: 4
-    default_container_name: docker
-    default_container_image: ubuntu
-    default_container_command: sleep 1
-    ansible_become: true
-    ansible_become_user: root
+  become: true
   tasks:
     - name: Update apt package cache
       apt:

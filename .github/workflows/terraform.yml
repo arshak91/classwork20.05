@@ -50,21 +50,21 @@ jobs:
           python -m pip install --upgrade pip
           pip install ansible
 
-      # - name: Get Terraform Outputs
-      #   working-directory: ./terraform/ec2
-      #   id: aws_instance
-      #   run: |
-      #     publicIp=$(terraform output EC2_Instance_Public_IP)
-      #     publicDNS=$(terraform output EC2_Instance_Public_DNS)
-      #     echo "::set-output name=publicIp::$publicIp"
-      #     echo "::set-output name=publicDNS::$publicDNS"
+      - name: Get Terraform Outputs
+        working-directory: ./terraform/ec2
+        id: aws_instance
+        run: |
+          publicIp=$(terraform output EC2_Instance_Public_IP)
+          publicDNS=$(terraform output EC2_Instance_Public_DNS)
+          echo "::set-output name=publicIp::$publicIp"
+          echo "::set-output name=publicDNS::$publicDNS"
 
-      # - name: write inventory
-      #   working-directory: ./ansible
-      #   run: echo ${{ steps.aws_instance.outputs.publicIp }} >> inventories
-      # - name: Cat file
-      #   working-directory: ./ansible
-      #   run: cat inventories
+      - name: write inventory
+        working-directory: ./ansible
+        run: echo ${{ steps.aws_instance.outputs.publicIp }} > inventories
+      - name: Cat file
+        working-directory: ./ansible
+        run: cat inventories
 
       # - name: Set up SSH key
       #   run: |
