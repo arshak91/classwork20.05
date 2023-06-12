@@ -69,8 +69,8 @@ jobs:
 
       - name: Connect to EC2 instance and copy PEM file
         run: |
-          touch ~/.ssh/known_hosts
-          echo "${{ steps.aws_instance.outputs.publicIp }}" > ~/.ssh/known_hosts
+          touch ~/.ssh/known_hosts && chmod 600 ~/.ssh/known_hosts
+          echo ${{ steps.aws_instance.outputs.publicIp }} > ~/.ssh/known_hosts
           ssh-keygen -R ${{ steps.aws_instance.outputs.publicIp }}
           scp -i ~/.ssh/id_rsa /.ssh/virginia.pem ubuntu@${{ steps.aws_instance.outputs.publicDNS }}:/.ssh/
 
