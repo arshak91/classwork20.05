@@ -1,17 +1,35 @@
 ---
-- name: Install Nginx in AWS AMI Docker container
+- name: Connect to EC2 instance
   hosts: all
   remote_user: ubuntu
+  gather_facts: false
   become: true
-  vars:
-    ansible_ssh_private_key_file: /home/arshak/Desktop/pem/virginia.pem
-    container_count: 4
-    default_container_name: docker
-    default_container_image: ubuntu
-    default_container_command: sleep 1
   tasks:
-    - name: Add NGINX conf
-      file:
-        src: /etc/nginx/sites-enabled/nginx.conf
-        dest: /etc/nginx/sites-enabled/default
-        state: link
+    - name: Install required dependencies
+      apt:
+        name: python3-pip
+        state: present
+
+    - name: Install Python AWS SDK (boto3)
+      pip:
+        name: boto3
+        state: present
+
+    - name: Connect to EC2 instance
+      delegate_to: localhost
+      gather_facts: false
+      connection: local
+      hosts: localhost
+      tasks:
+        - name: Configure SSH connection
+          ansible.builtin.ansible_connection: ssh
+          ansible.builtin.ansible_user: ubuntu
+          ansible.builtin.ansible_ssh_private_key_file: /path/to/private/key.pem
+
+    - name: Run commands on EC2 instance
+      hosts: ec2-instance
+      gather_facts: true
+      become: true
+      tasks:
+        - name: Execute command on EC2 instance
+          shell: echo "Hello, EC2 instance!

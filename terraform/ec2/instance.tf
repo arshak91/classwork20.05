@@ -32,9 +32,6 @@ resource "aws_instance" "web" {
       private_key = var.private_key_path
       host        = self.public_ip
     }
-    inline = [
-      "ansible-playbook -i ${self.public_ip}, --private-key ${var.private_key_path} nginx-container.yml"
-    ]
   }
   tags = {
     Name = "${var.name}-Instance"

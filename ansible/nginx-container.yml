@@ -2,6 +2,7 @@
 - name: Install Nginx in AWS AMI Docker container
   hosts: all
   remote_user: ubuntu
+  gather_facts: false
   become: true
   tasks:
     - name: Update apt package cache
