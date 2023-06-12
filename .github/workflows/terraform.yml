@@ -66,11 +66,11 @@ jobs:
         working-directory: ./ansible
         run: cat inventories
 
-      # - name: Set up SSH key
-      #   run: |
-      #     mkdir -p ~/.ssh/
-      #     touch ~/.ssh/id_rsa
-      #     echo "${{ secrets.AWS_PRIVATE_KEY }}" > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          touch ~/.ssh/id_rsa
+          echo "${{ secrets.AWS_PRIVATE_KEY }}" > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
 
       # - name: Connect to EC2 instance and copy PEM file
       #   run: |
@@ -82,8 +82,5 @@ jobs:
 
       - name: Run Ansible playbook
         working-directory: ./ansible
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
         run: |
-          ansible-playbook -i inventories nginx-container.yml
+          ansible-playbooke -i inventories nginx-container.yml
