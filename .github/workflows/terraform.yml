@@ -15,49 +15,49 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      # - name: Configure AWS Credentials
-      #   uses: aws-actions/configure-aws-credentials@v2
-      #   with:
-      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
-      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
-      #     aws-region: us-east-1
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-region: us-east-1
 
-      # # - name: Packer Build
-      # #   env:
-      # #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
-      # #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
-      # #   run: |
-      # #     packer build packer/index.json
-
-      # - name: Terraform Init
-      #   run: terraform init -upgrade
-      #   working-directory: ./terraform/ec2
-
-      # - name: Terraform Apply
-      #   working-directory: ./terraform/ec2
-      #   run: terraform apply -auto-approve -var="access_key=${{ secrets.AWS_ACCESS_KEY }}"
-      #     -var="secret_key=${{ secrets.AWS_SECRET_KEY }}"
-      #     -var="private_key_path=${{ secrets.AWS_PRIVATE_KEY }}"
-      #     -var-file="./variables.tfvars"
-
-      # - name: Set up Python
-      #   uses: actions/setup-python@v2
-      #   with:
-      #     python-version: 3.x
-
-      # - name: Get Terraform Outputs
-      #   working-directory: ./terraform/ec2
-      #   id: aws_instance
+      # - name: Packer Build
+      #   env:
+      #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
       #   run: |
-      #     publicIp=$(terraform output aws_instance)
-      #     echo "::set-output name=outputs::$publicIp"
+      #     packer build packer/index.json
 
-      # - name: write inventory
-      #   working-directory: ./ansible
-      #   run: echo ${{ steps.aws_instance.outputs.outputs }} >> inventories
-      # - name: Cat file
-      #   working-directory: ./ansible
-      #   run: cat inventories
+      - name: Terraform Init
+        run: terraform init -upgrade
+        working-directory: ./terraform/ec2
+
+      - name: Terraform Apply
+        working-directory: ./terraform/ec2
+        run: terraform apply -auto-approve -var="access_key=${{ secrets.AWS_ACCESS_KEY }}"
+          -var="secret_key=${{ secrets.AWS_SECRET_KEY }}"
+          -var="private_key_path=${{ secrets.AWS_PRIVATE_KEY }}"
+          -var-file="./variables.tfvars"
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+
+      - name: Get Terraform Outputs
+        working-directory: ./terraform/ec2
+        id: aws_instance
+        run: |
+          publicIp=$(terraform output aws_instance)
+          echo "::set-output name=outputs::$publicIp"
+
+      - name: write inventory
+        working-directory: ./ansible
+        run: echo ${{ steps.aws_instance.outputs.outputs }} >> inventories
+      - name: Cat file
+        working-directory: ./ansible
+        run: cat inventories
 
       - name: Set up SSH key
         run: |
