@@ -83,4 +83,4 @@ jobs:
       - name: Run Ansible playbook
         working-directory: ./ansible
         run: |
-          ansible-playbook -i ${{ steps.aws_instance.outputs.publicIp }}, --key-file ${{ secrets.AWS_PRIVATE_KEY }} nginx-container.yml
+          ansible-playbook -i ${{ steps.aws_instance.outputs.publicIp }}, nginx-container.yml --user ubuntu --private-key ${{ secrets.AWS_PRIVATE_KEY }} 
