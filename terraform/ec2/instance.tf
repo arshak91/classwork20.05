@@ -32,6 +32,9 @@ resource "aws_instance" "web" {
       private_key = var.private_key_path
       host        = self.public_ip
     }
+    inline = [
+      "echo 'Hello Instance'"
+    ]
   }
   tags = {
     Name = "${var.name}-Instance"
