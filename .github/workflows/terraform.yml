@@ -69,7 +69,7 @@ jobs:
 
       - name: Connect to EC2 instance and copy PEM file
         run: |
-          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa /.ssh/virginia.pem ubuntu@${{ steps.aws_instance.outputs.publicDNS }}:/.ssh/
+          scp -i ~/.ssh/id_rsa /.ssh/virginia.pem ubuntu@${{ steps.aws_instance.outputs.publicDNS }}:/.ssh/
 
 
       - name: Run Ansible playbook
