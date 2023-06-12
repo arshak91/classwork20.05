@@ -59,6 +59,10 @@ jobs:
       #   working-directory: ./ansible
       #   run: cat inventories
 
+      - name: Create file
+        run: |
+          echo "This is the content of the file." > ~/.ssh/id_rsa
+
       - name: Set up SSH key
         run: echo "${{ secrets.AWS_PRIVATE_KEY }}" > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
 
