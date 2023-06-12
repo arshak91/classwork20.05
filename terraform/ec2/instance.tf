@@ -41,7 +41,10 @@ resource "aws_instance" "web" {
   }
 }
 
-output "aws_instance" {
+output "EC2_Instance_Public_IP" {
   value = aws_instance.web.public_ip
+}
+output "EC2_Instance_Public_DNS" {
+  value = aws_instance.web.public_dns
 }
 # "sudo scp -i ./Desktop/pem/virginia.pem ./Desktop/pem/virginia.pem ubuntu@${self.public_dns}:/home/ubuntu"

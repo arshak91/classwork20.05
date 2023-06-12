@@ -49,12 +49,14 @@ jobs:
         working-directory: ./terraform/ec2
         id: aws_instance
         run: |
-          publicIp=$(terraform output aws_instance)
-          echo "::set-output name=outputs::$publicIp"
+          publicIp=$(terraform output EC2_Instance_Public_IP)
+          publicDNS=$(terraform output EC2_Instance_Public_DNS)
+          echo "::set-output name=publicIp::$publicIp"
+          echo "::set-output name=publicDNS::$publicDNS"
 
       - name: write inventory
         working-directory: ./ansible
-        run: echo ${{ steps.aws_instance.outputs.outputs }} >> inventories
+        run: echo ${{ steps.aws_instance.outputs.publicIp }} >> inventories
       - name: Cat file
         working-directory: ./ansible
         run: cat inventories
@@ -64,6 +66,11 @@ jobs:
           mkdir -p ~/.ssh/
           touch ~/.ssh/id_rsa
           echo "${{ secrets.AWS_PRIVATE_KEY }}" > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
+
+      - name: Connect to EC2 instance and copy PEM file
+        run: |
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa /.ssh/virginia.pem ubuntu@${{ steps.aws_instance.outputs.publicDNS }}:/.ssh/
+
 
       - name: Run Ansible playbook
         working-directory: ./ansible
