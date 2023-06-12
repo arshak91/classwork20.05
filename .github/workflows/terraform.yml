@@ -45,37 +45,45 @@ jobs:
         with:
           python-version: 3.x
 
-      - name: Get Terraform Outputs
-        working-directory: ./terraform/ec2
-        id: aws_instance
+      - name: Install Ansible
         run: |
-          publicIp=$(terraform output EC2_Instance_Public_IP)
-          publicDNS=$(terraform output EC2_Instance_Public_DNS)
-          echo "::set-output name=publicIp::$publicIp"
-          echo "::set-output name=publicDNS::$publicDNS"
+          python -m pip install --upgrade pip
+          pip install ansible
 
-      - name: write inventory
-        working-directory: ./ansible
-        run: echo ${{ steps.aws_instance.outputs.publicIp }} >> inventories
-      - name: Cat file
-        working-directory: ./ansible
-        run: cat inventories
+      # - name: Get Terraform Outputs
+      #   working-directory: ./terraform/ec2
+      #   id: aws_instance
+      #   run: |
+      #     publicIp=$(terraform output EC2_Instance_Public_IP)
+      #     publicDNS=$(terraform output EC2_Instance_Public_DNS)
+      #     echo "::set-output name=publicIp::$publicIp"
+      #     echo "::set-output name=publicDNS::$publicDNS"
 
-      - name: Set up SSH key
-        run: |
-          mkdir -p ~/.ssh/
-          touch ~/.ssh/id_rsa
-          echo "${{ secrets.AWS_PRIVATE_KEY }}" > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
+      # - name: write inventory
+      #   working-directory: ./ansible
+      #   run: echo ${{ steps.aws_instance.outputs.publicIp }} >> inventories
+      # - name: Cat file
+      #   working-directory: ./ansible
+      #   run: cat inventories
 
-      - name: Connect to EC2 instance and copy PEM file
-        run: |
-          touch ~/.ssh/known_hosts && chmod 600 ~/.ssh/known_hosts
-          echo ${{ steps.aws_instance.outputs.publicIp }} > ~/.ssh/known_hosts
-          ssh-keygen -R ${{ steps.aws_instance.outputs.publicIp }}
-          scp -i ~/.ssh/id_rsa /.ssh/virginia.pem ubuntu@${{ steps.aws_instance.outputs.publicDNS }}:/.ssh/
+      # - name: Set up SSH key
+      #   run: |
+      #     mkdir -p ~/.ssh/
+      #     touch ~/.ssh/id_rsa
+      #     echo "${{ secrets.AWS_PRIVATE_KEY }}" > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
+
+      # - name: Connect to EC2 instance and copy PEM file
+      #   run: |
+      #     touch ~/.ssh/known_hosts && chmod 600 ~/.ssh/known_hosts
+      #     echo ${{ steps.aws_instance.outputs.publicIp }} > ~/.ssh/known_hosts
+      #     ssh-keygen -R ${{ steps.aws_instance.outputs.publicIp }}
+          # scp -i ~/.ssh/id_rsa /.ssh/virginia.pem ubuntu@${{ steps.aws_instance.outputs.publicDNS }}:/.ssh/
 
 
       - name: Run Ansible playbook
         working-directory: ./ansible
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
         run: |
-          ansible-playbook -i inventories nginx-container.yml -e "aws_access_key=${{ secrets.AWS_ACCESS_KEY }}" -e "aws_secret_key=${{ secrets.AWS_SECRET_KEY }}"
+          ansible-playbook -i inventories nginx-container.yml
