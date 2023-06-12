@@ -83,4 +83,4 @@ jobs:
       - name: Run Ansible playbook
         working-directory: ./ansible
         run: |
-          ansible-playbooke -i inventories nginx-container.yml
+          ansible-playbook -i inventories nginx-container.yml
