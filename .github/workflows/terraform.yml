@@ -89,7 +89,7 @@ jobs:
       #     sudo apt-get update
       #     sudo apt-get install -y ansible
 
-      # - name: Run Ansible playbook
-      #   working-directory: ./ansible
-      #   run: |
-      #     ansible-playbook -i ${{ steps.aws_instance.outputs.publicIp }}, nginx-container.yml --user ubuntu --private-key /root/.ssh/id_rsa
+      - name: Run Ansible playbook
+        working-directory: ./ansible
+        run: |
+          ansible-playbook -i ${{ steps.aws_instance.outputs.publicIp }}, nginx-container.yml
