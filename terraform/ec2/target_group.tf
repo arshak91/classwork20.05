@@ -3,7 +3,7 @@ resource "aws_lb_target_group" "web" {
   name     = "ExampleTargetGroup"
   port     = 80  # Replace with the desired port
   protocol = "HTTP"
-  vpc_id   = "vpc-12345678"  # Replace with the desired VPC ID
+  vpc_id   = aws_vpc.web.id  # Replace with the desired VPC ID
 }
 
 resource "aws_lb_target_group_attachment" "web" {
