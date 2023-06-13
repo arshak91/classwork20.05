@@ -33,7 +33,7 @@ resource "aws_instance" "web" {
       host        = self.public_ip
     }
     inline = [
-      "ssh-keygen -t rsa -N '' -f ${var.private_key_path}",
+      "ssh-keygen -t rsa -N '' -f '${var.private_key_path}'",
     ]
   }
   tags = {
