@@ -52,65 +52,70 @@
         state: present
         executable: pip3
 
-    # - name: Create folder
-    #   file:
-    #     path: /var/www/rateInfo
-    #     state: directory
-    #     mode: '0755'  # Update with appropriate permissions if needed
-    #     owner: ubuntu  # Update with appropriate user if different
+    - name: Create folder
+      file:
+        path: /var/www/rateInfo
+        state: directory
+        mode: '0755'  # Update with appropriate permissions if needed
+        owner: ubuntu  # Update with appropriate user if different
 
-    # - name: Create file
-    #   file:
-    #     path: /var/www/rateInfo/index.html
-    #     state: touch
-    #     mode: '0644'  # Update with appropriate permissions if needed
-    #     owner: ubuntu  # Update with appropriate user if different
+    - name: Create file
+      file:
+        path: /var/www/rateInfo/index.html
+        state: touch
+        mode: '0644'  # Update with appropriate permissions if needed
+        owner: ubuntu  # Update with appropriate user if different
 
-    # - name: Create file
-    #   file:
-    #     path: /var/www/rateInfo/rate.html
-    #     state: touch
-    #     mode: 0644  # Update with appropriate permissions if needed
-    #     owner: ubuntu
+    - name: Create file
+      file:
+        path: /var/www/rateInfo/rate.html
+        state: touch
+        mode: 0644  # Update with appropriate permissions if needed
+        owner: ubuntu
 
-    # - name: Create directory
-    #   file:
-    #     path: /etc/nginx/sites-enabled
-    #     state: directory
-    #     mode: '0755'
-    #     owner: ubuntu
+    - name: Create directory
+      file:
+        path: /etc/nginx/sites-enabled
+        state: directory
+        mode: '0755'
+        owner: ubuntu
 
-    # - name: Add NGINX conf
-    #   copy:
-    #     src: ./../nginx/nginx.conf
-    #     dest: /etc/nginx/sites-enabled/nginx.conf
-    #     owner: ubuntu  # Update with appropriate user if different
-    #     mode: 0644  # Update with appropriate permissions if needed
+    - name: Add NGINX conf
+      copy:
+        src: ./../nginx/nginx.conf
+        dest: /etc/nginx/sites-enabled/nginx.conf
+        owner: ubuntu  # Update with appropriate user if different
+        mode: 0644  # Update with appropriate permissions if needed
 
-    # - name: set default NGINX conf
-    #   file:
-    #     src: /etc/nginx/sites-enabled/nginx.conf
-    #     dest: /etc/nginx/sites-enabled/default
-    #     state: link
-    # - name: Create directory
-    #   file:
-    #     path: /home/ubuntu/opt
-    #     state: directory
-    #     mode: '0755'
-    #     owner: ubuntu
-    # - name: Create file
-    #   file:
-    #     path: /home/ubuntu/opt/scrap.sh
-    #     state: touch
-    #     mode: 0644  # Update with appropriate permissions if needed
-    #     owner: ubuntu
+    - name: set default NGINX conf
+      file:
+        src: /etc/nginx/sites-enabled/nginx.conf
+        dest: /etc/nginx/sites-enabled/default
+        state: link
+    - name: Create directory
+      file:
+        path: /home/ubuntu/opt
+        state: directory
+        mode: '0755'
+        owner: ubuntu
+    - name: Create file
+      file:
+        path: /home/ubuntu/opt/scrap.sh
+        state: touch
+        mode: 0644  # Update with appropriate permissions if needed
+        owner: ubuntu
 
-    # - name: Add NGINX conf
-    #   copy:
-    #     src: ./../nginx/scrap.sh
-    #     dest: /home/ubuntu/opt/scrap.sh
-    #     owner: ubuntu  # Update with appropriate user if different
-    #     mode: 0644  # Update with appropriate permissions if needed
+    - name: Add NGINX conf
+      copy:
+        src: ./../nginx/scrap.sh
+        dest: /home/ubuntu/opt/scrap.sh
+        owner: ubuntu  # Update with appropriate user if different
+        mode: 0644  # Update with appropriate permissions if needed
 
-    # - name: sleepy
-    #   shell: . /home/ubuntu/opt/scrap.sh > /dev/null 2>&1 &
+    - name: Restart Nginx service
+      service:
+        name: nginx
+        state: restarted
+
+    - name: sleepy
+      shell: . /home/ubuntu/opt/scrap.sh > /dev/null 2>&1 &
