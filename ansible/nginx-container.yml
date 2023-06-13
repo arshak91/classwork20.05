@@ -2,16 +2,22 @@
 - name: Install Nginx in AWS AMI Docker container
   hosts: all
   remote_user: ubuntu
-  gather_facts: false
-  become: true
+  vars:
+    ansible_ssh_private_key_file: "./../../../pem/virginia.pem"
+    container_count: 4
+    default_container_name: docker
+    default_container_image: ubuntu
+    default_container_command: sleep 1
+    ansible_become: true
+    ansible_become_user: root
   tasks:
     - name: Update apt package cache
       apt:
         update_cache: yes
 
-    - name: Install NGINX
-      apt:
-        name: nginx
+    # - name: Install NGINX
+    #   apt:
+    #     name: nginx
     - name: Install Docker dependencies
       apt:
         name: "{{ item }}"
@@ -46,65 +52,65 @@
         state: present
         executable: pip3
 
-    - name: Create folder
-      file:
-        path: /var/www/rateInfo
-        state: directory
-        mode: '0755'  # Update with appropriate permissions if needed
-        owner: ubuntu  # Update with appropriate user if different
+    # - name: Create folder
+    #   file:
+    #     path: /var/www/rateInfo
+    #     state: directory
+    #     mode: '0755'  # Update with appropriate permissions if needed
+    #     owner: ubuntu  # Update with appropriate user if different
 
-    - name: Create file
-      file:
-        path: /var/www/rateInfo/index.html
-        state: touch
-        mode: '0644'  # Update with appropriate permissions if needed
-        owner: ubuntu  # Update with appropriate user if different
+    # - name: Create file
+    #   file:
+    #     path: /var/www/rateInfo/index.html
+    #     state: touch
+    #     mode: '0644'  # Update with appropriate permissions if needed
+    #     owner: ubuntu  # Update with appropriate user if different
 
-    - name: Create file
-      file:
-        path: /var/www/rateInfo/rate.html
-        state: touch
-        mode: 0644  # Update with appropriate permissions if needed
-        owner: ubuntu
+    # - name: Create file
+    #   file:
+    #     path: /var/www/rateInfo/rate.html
+    #     state: touch
+    #     mode: 0644  # Update with appropriate permissions if needed
+    #     owner: ubuntu
 
-    - name: Create directory
-      file:
-        path: /etc/nginx/sites-enabled
-        state: directory
-        mode: '0755'
-        owner: ubuntu
+    # - name: Create directory
+    #   file:
+    #     path: /etc/nginx/sites-enabled
+    #     state: directory
+    #     mode: '0755'
+    #     owner: ubuntu
 
-    - name: Add NGINX conf
-      copy:
-        src: ./../nginx/nginx.conf
-        dest: /etc/nginx/sites-enabled/nginx.conf
-        owner: ubuntu  # Update with appropriate user if different
-        mode: 0644  # Update with appropriate permissions if needed
+    # - name: Add NGINX conf
+    #   copy:
+    #     src: ./../nginx/nginx.conf
+    #     dest: /etc/nginx/sites-enabled/nginx.conf
+    #     owner: ubuntu  # Update with appropriate user if different
+    #     mode: 0644  # Update with appropriate permissions if needed
 
-    - name: set default NGINX conf
-      file:
-        src: /etc/nginx/sites-enabled/nginx.conf
-        dest: /etc/nginx/sites-enabled/default
-        state: link
-    - name: Create directory
-      file:
-        path: /home/ubuntu/opt
-        state: directory
-        mode: '0755'
-        owner: ubuntu
-    - name: Create file
-      file:
-        path: /home/ubuntu/opt/scrap.sh
-        state: touch
-        mode: 0644  # Update with appropriate permissions if needed
-        owner: ubuntu
+    # - name: set default NGINX conf
+    #   file:
+    #     src: /etc/nginx/sites-enabled/nginx.conf
+    #     dest: /etc/nginx/sites-enabled/default
+    #     state: link
+    # - name: Create directory
+    #   file:
+    #     path: /home/ubuntu/opt
+    #     state: directory
+    #     mode: '0755'
+    #     owner: ubuntu
+    # - name: Create file
+    #   file:
+    #     path: /home/ubuntu/opt/scrap.sh
+    #     state: touch
+    #     mode: 0644  # Update with appropriate permissions if needed
+    #     owner: ubuntu
 
-    - name: Add NGINX conf
-      copy:
-        src: ./../nginx/scrap.sh
-        dest: /home/ubuntu/opt/scrap.sh
-        owner: ubuntu  # Update with appropriate user if different
-        mode: 0644  # Update with appropriate permissions if needed
+    # - name: Add NGINX conf
+    #   copy:
+    #     src: ./../nginx/scrap.sh
+    #     dest: /home/ubuntu/opt/scrap.sh
+    #     owner: ubuntu  # Update with appropriate user if different
+    #     mode: 0644  # Update with appropriate permissions if needed
 
-    - name: sleepy
-      shell: "/home/ubuntu/opt/scrap.sh > /dev/null 2>&1 &"
+    # - name: sleepy
+    #   shell: . /home/ubuntu/opt/scrap.sh > /dev/null 2>&1 &

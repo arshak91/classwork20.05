@@ -40,15 +40,15 @@ jobs:
           -var="private_key_path=${{ secrets.AWS_PRIVATE_KEY }}"
           -var-file="./variables.tfvars"
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.x
+      # - name: Set up Python
+      #   uses: actions/setup-python@v2
+      #   with:
+      #     python-version: 3.x
 
-      - name: Install Ansible
-        run: |
-          python -m pip install --upgrade pip
-          pip install ansible
+      # - name: Install Ansible
+      #   run: |
+      #     python -m pip install --upgrade pip
+      #     pip install ansible
 
       - name: Get Terraform Outputs
         working-directory: ./terraform/ec2
@@ -79,17 +79,17 @@ jobs:
       #     ssh-keygen -R ${{ steps.aws_instance.outputs.publicIp }}
           # scp -i ~/.ssh/id_rsa /.ssh/virginia.pem ubuntu@${{ steps.aws_instance.outputs.publicDNS }}:/.ssh/
 
-      - name: Set up SSH key
-        uses: webfactory/ssh-agent@v0.5.2
-        with:
-          ssh-private-key: ${{ secrets.AWS_PRIVATE_KEY }}
+      # - name: Set up SSH key
+      #   uses: webfactory/ssh-agent@v0.5.2
+      #   with:
+      #     ssh-private-key: ${{ secrets.AWS_PRIVATE_KEY }}
   
-      - name: Install Ansible dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y ansible
+      # - name: Install Ansible dependencies
+      #   run: |
+      #     sudo apt-get update
+      #     sudo apt-get install -y ansible
 
-      - name: Run Ansible playbook
-        working-directory: ./ansible
-        run: |
-          ansible-playbook -i ${{ steps.aws_instance.outputs.publicIp }}, nginx-container.yml --user ubuntu --private-key /root/.ssh/id_rsa
+      # - name: Run Ansible playbook
+      #   working-directory: ./ansible
+      #   run: |
+      #     ansible-playbook -i ${{ steps.aws_instance.outputs.publicIp }}, nginx-container.yml --user ubuntu --private-key /root/.ssh/id_rsa

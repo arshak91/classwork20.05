@@ -37,7 +37,7 @@ resource "aws_instance" "web" {
     ]
   }
   tags = {
-    Name = "${var.name}-Instance"
+    Name = "${var.name}"
   }
 }
 
