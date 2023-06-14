@@ -91,7 +91,7 @@ jobs:
 
       - name: add Private Key
         run: |
-          "mkdir -r .ssh"
+          "mkdir .ssh"
           "echo ${{ secrets.AWS_PRIVATE_KEY }} > .ssh/id_rsa",
           "chmod 600 .ssh/id_rsa"
 
