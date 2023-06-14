@@ -89,14 +89,13 @@ jobs:
       #     sudo apt-get update
       #     sudo apt-get install -y ansible
 
-      - name: add Private Key
-        run: |
-          pwd
-          ll
-          echo ${{ secrets.AWS_PRIVATE_KEY }} > .ssh/id_rsa
-          chmod 600 .ssh/id_rsa
+      - name: Write private key
+        run: echo "${{ secrets.AWS_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+
+      - name: Set private key permissions
+        run: chmod 600 ~/.ssh/id_rsa
 
       - name: Run Ansible playbook
         working-directory: ./ansible
         run: |
-          ansible-playbook -i ${{ steps.aws_instance.outputs.publicIp }}, nginx-container.yml -u ubuntu --private-key .ssh/id_rsa -e "ansible_ssh_common_args='-o StrictHostKeyChecking=no'"
+          ansible-playbook nginx-container.yml -i ${{ steps.aws_instance.outputs.publicIp }} -u ubuntu --private-key ~/.ssh/id_rsa -e "ansible_ssh_common_args='-o StrictHostKeyChecking=no'"
