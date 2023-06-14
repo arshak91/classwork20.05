@@ -92,10 +92,13 @@ jobs:
         run: mkdir -p $HOME/.ssh
 
       - name: Write private key
-        run: echo "${{ secrets.AWS_PRIVATE_KEY }}" > $HOME/.ssh/id_rsa
+        run: |
+          la $HOME/
+          echo "${{ secrets.AWS_PRIVATE_KEY }}" > $HOME/.ssh/id_rsa
+          la $HOME/.ssh/
 
       - name: Set private key permissions
-        run: chmod 600 $HOME/.ssh/id_rsa
+        run: chmod -R 777 $HOME/.ssh/id_rsa
 
       - name: Run Ansible playbook
         working-directory: ./ansible
