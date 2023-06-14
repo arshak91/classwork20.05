@@ -93,7 +93,8 @@ jobs:
 
       - name: Write private key
         run: |
-          la $HOME/
+          echo "${HOME}"/
+          echo "$HOME"/
           echo "${{ secrets.AWS_PRIVATE_KEY }}" > $HOME/.ssh/id_rsa
           la $HOME/.ssh/
 
