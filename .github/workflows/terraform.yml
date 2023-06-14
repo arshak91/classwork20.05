@@ -91,11 +91,11 @@ jobs:
 
       - name: add Private Key
         run: |
-          "mkdir ~/.ssh"
-          "echo ${{ secrets.AWS_PRIVATE_KEY }} > ~/.ssh/id_rsa",
-          "chmod 600 ~/.ssh/id_rsa"
+          "mkdir -r .ssh"
+          "echo ${{ secrets.AWS_PRIVATE_KEY }} > .ssh/id_rsa",
+          "chmod 600 .ssh/id_rsa"
 
       - name: Run Ansible playbook
         working-directory: ./ansible
         run: |
-          ansible-playbook -i ${{ steps.aws_instance.outputs.publicIp }}, nginx-container.yml -u ubuntu --private-key ~/.ssh/id_rsa -e "ansible_ssh_common_args='-o StrictHostKeyChecking=no'"
+          ansible-playbook -i ${{ steps.aws_instance.outputs.publicIp }}, nginx-container.yml -u ubuntu --private-key .ssh/id_rsa -e "ansible_ssh_common_args='-o StrictHostKeyChecking=no'"
