@@ -92,7 +92,8 @@ jobs:
       - name: add Private Key
         run: |
           "mkdir .ssh"
-          "echo ${{ secrets.AWS_PRIVATE_KEY }} > .ssh/id_rsa",
+          "pwd"
+          "echo ${{ secrets.AWS_PRIVATE_KEY }} > .ssh/id_rsa"
           "chmod 600 .ssh/id_rsa"
 
       - name: Run Ansible playbook
