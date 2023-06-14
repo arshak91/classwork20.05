@@ -34,8 +34,9 @@ resource "aws_instance" "web" {
     }
     inline = [
       # "ssh-keygen -t rsa -N '' -f '${var.private_key_path}'",
-      "echo \"${var.private_key_path}\" > ~/.ssh/id_rsa",
-      "chmod 600 ~/.ssh/id_rsa"
+      # "echo \"${var.private_key_path}\" > ~/.ssh/id_rsa",
+      # "chmod 600 ~/.ssh/id_rsa"
+      "echo 'hello'"
     ]
   }
   tags = {
