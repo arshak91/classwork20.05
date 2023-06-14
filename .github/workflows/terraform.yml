@@ -58,9 +58,9 @@ jobs:
           echo "::set-output name=publicIp::$publicIp"
           echo "::set-output name=publicDNS::$publicDNS"
 
-      # - name: write inventory
-      #   working-directory: ./ansible
-      #   run: echo ${{ steps.aws_instance.outputs.publicIp }} > inventories
+      - name: write inventory
+        working-directory: ./ansible
+        run: echo ${{ steps.aws_instance.outputs.publicIp }} >> inventories
       # - name: Cat file
       #   working-directory: ./ansible
       #   run: cat inventories
@@ -100,4 +100,4 @@ jobs:
       - name: Run Ansible playbook
         working-directory: ./ansible
         run: |
-          ansible-playbook nginx-container.yml -i ${{ steps.aws_instance.outputs.publicIp }} -u ubuntu --private-key $HOME/.ssh/id_rsa -e "ansible_ssh_common_args='-o StrictHostKeyChecking=no'"
+          ansible-playbook nginx-container.yml -i inventories -u ubuntu --private-key $HOME/.ssh/id_rsa -e "ansible_ssh_common_args='-o StrictHostKeyChecking=no'"
