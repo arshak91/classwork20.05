@@ -83,7 +83,7 @@ jobs:
       #   uses: webfactory/ssh-agent@v0.5.2
       #   with:
       #     ssh-private-key: ${{ secrets.AWS_PRIVATE_KEY }}
-  
+
       # - name: Install Ansible dependencies
       #   run: |
       #     sudo apt-get update
@@ -92,4 +92,4 @@ jobs:
       - name: Run Ansible playbook
         working-directory: ./ansible
         run: |
-          ansible-playbook -i ${{ steps.aws_instance.outputs.publicIp }}, nginx-container.yml
+          ansible-playbook -i ${{ steps.aws_instance.outputs.publicIp }}, nginx-container.yml -u ubuntu --private-key ~/.ssh/id_rsa -e "ansible_ssh_common_args='-o StrictHostKeyChecking=no'"
