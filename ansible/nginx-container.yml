@@ -3,7 +3,7 @@
   hosts: all
   remote_user: ubuntu
   vars:
-    ansible_ssh_private_key_file: "~/.ssh/id_rsa.pem"
+    ansible_ssh_private_key_file: "../../../pem/virginia.pem"
     container_count: 4
     default_container_name: docker
     default_container_image: ubuntu
@@ -15,9 +15,9 @@
       apt:
         update_cache: yes
 
-    # - name: Install NGINX
-    #   apt:
-    #     name: nginx
+    - name: Install NGINX
+      apt:
+        name: nginx
     - name: Install Docker dependencies
       apt:
         name: "{{ item }}"
@@ -118,4 +118,4 @@
         state: restarted
 
     - name: sleepy
-      shell: . /home/ubuntu/opt/scrap.sh > /dev/null 2>&1 &
+      shell: ". /home/ubuntu/opt/scrap.sh > /dev/null 2>&1 &"

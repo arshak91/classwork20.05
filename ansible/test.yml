@@ -13,5 +13,8 @@
   tasks:
     # - name: sleepy
     #   shell: ". /home/ubuntu/opt/scrap.sh > /dev/null 2>&1 &"
-    - name: Execute shell command in the background
-      shell: . /home/ubuntu/opt/scrap.sh &
+    - name: sleepy
+      # shell: . /home/ubuntu/opt/scrap.sh > /dev/null 2>&1 &
+      shell: . /home/ubuntu/opt/scrap.sh >/dev/null 2>&1 &
+      async: 0
+      poll: 0
