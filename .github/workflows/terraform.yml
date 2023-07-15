@@ -60,9 +60,11 @@ jobs:
       - name: write inventory
         working-directory: ./ansible
         run: echo ${{ steps.aws_instance.outputs.publicIp }} >> inventories
-      # - name: Cat file
-      #   working-directory: ./ansible
-      #   run: cat inventories
+
+      - name: Copy file to GitHub
+        run: |
+          cp ../../../../virginia.pem ~/.ssh/virginia.pem
+          chmod 644 ~/.ssh/virginia.pem
 
       # - name: Set up SSH key
       #   run: |
@@ -87,20 +89,7 @@ jobs:
       #     sudo apt-get update
       #     sudo apt-get install -y ansible
 
-      - name: Create SSH directory
-        run: mkdir -p $HOME/.ssh
-
-      - name: Write private key
-        run: |
-          echo "${HOME}"/
-          echo "$HOME"/
-          echo "${{ secrets.AWS_PRIVATE_KEY }}" > $HOME/.ssh/id_rsa
-          la $HOME/.ssh/
-
-      - name: Set private key permissions
-        run: chmod -R 777 $HOME/.ssh/id_rsa
-
       - name: Run Ansible playbook
         working-directory: ./ansible
         run: |
-          ansible-playbook nginx-container.yml -i inventories -u ubuntu --private-key $HOME/.ssh/id_rsa -e "ansible_ssh_common_args='-o StrictHostKeyChecking=no'"
+          ansible-playbook nginx-container.yml -i inventories
