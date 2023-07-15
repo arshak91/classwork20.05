@@ -25,20 +25,6 @@ resource "aws_instance" "web" {
   subnet_id     = aws_subnet.web.id
   vpc_security_group_ids = [aws_security_group.web.id]
   key_name      = "virginia"
-  provisioner "remote-exec" {
-    connection {
-      type        = "ssh"
-      user        = "ubuntu"
-      private_key = var.private_key_path
-      host        = self.public_ip
-    }
-    inline = [
-      # "ssh-keygen -t rsa -N '' -f '${var.private_key_path}'",
-      # "echo \"${var.private_key_path}\" > ~/.ssh/id_rsa",
-      # "chmod 600 ~/.ssh/id_rsa"
-      "echo 'hello'"
-    ]
-  }
   tags = {
     Name = "${var.name}"
   }
