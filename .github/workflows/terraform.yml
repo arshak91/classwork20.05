@@ -37,7 +37,6 @@ jobs:
         working-directory: ./terraform/ec2
         run: terraform apply -auto-approve -var="access_key=${{ secrets.AWS_ACCESS_KEY }}"
           -var="secret_key=${{ secrets.AWS_SECRET_KEY }}"
-          -var="private_key_path=${{ secrets.AWS_PRIVATE_KEY }}"
           -var-file="./variables.tfvars"
 
       - name: Set up Python

@@ -3,7 +3,7 @@
   hosts: all
   remote_user: ubuntu
   vars:
-    ansible_ssh_private_key_file: "../../../pem/virginia.pem"
+    ansible_ssh_private_key_file: "~/.ssh/virginia.pem"
     container_count: 4
     default_container_name: docker
     default_container_image: ubuntu
@@ -11,6 +11,18 @@
     ansible_become: true
     ansible_become_user: root
   tasks:
+    - name: copy pem file
+      copy:
+        src: ../../../virginia.pem
+        dest: ~/.ssh/virginia.pem
+        owner: ubuntu  # Update with appropriate user if different
+        mode: 0644  # Update with appropriate permissions if needed
+    - name: Change permissions of a pem file
+      file:
+        path: ~/.ssh/virginia.pem
+        mode: "0644"  # Specify the desired permissions here
+        state: file
+
     - name: Update apt package cache
       apt:
         update_cache: yes

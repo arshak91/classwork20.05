@@ -128,5 +128,5 @@ echo $html_content
   sleep 30
 
   # Write the HTML code to a file
-  echo "$html" > "index.html"
+  echo "$html" > "/usr/share/nginx/html/index.html"
 done
